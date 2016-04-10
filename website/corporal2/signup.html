@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+    <!-- Main Style -->
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+
+    <!-- Responsive Style -->
+    <link rel="stylesheet" type="text/css" href="assets/css/responsive.css">
+
+    <!--Icon Fonts-->
+    <link rel="stylesheet" media="screen" href="assets/fonts/font-awesome/font-awesome.min.css" />
+
+
+    <!-- Extras -->
+    <link rel="stylesheet" type="text/css" href="assets/extras/animate.css">
+    <link rel="stylesheet" type="text/css" href="assets/extras/lightbox.css">
+	<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+	<title></title>
+	<script type="text/javascript">
+		var myFirebaseRef = new Firebase("https://fitnessvr.firebaseio.com/");
+		function validateForm2()
+		{
+			var x = document.getElementById("signinEmail").value;
+			var y = document.getElementById("signinPassword").value;
+			if (x == null || x == "")
+    		{
+        			alert("Email must be filled out");
+        			document.getElementById("signinPassword").value = "";
+        			document.getElementById("signinEmail").value = "";
+        			return false;
+        	}
+        	if(y==null || y=="")
+        	{
+        		alert("Email must be filled out");
+        		document.getElementById("signinPassword").value = "";
+        		document.getElementById("signinEmail").value = "";
+        		return false;
+        	}
+        	var obj = new Object();
+   			obj.email = document.getElementById("signinEmail").value;
+   			obj.password  = document.getElementById("signinPassword").value;
+
+        	myFirebaseRef.authWithPassword(obj, function(error, authData) {
+  				if (error) {
+    				console.log("Login Failed!", error);
+    				return false;
+  				} else {
+    				console.log("Authenticated successfully with payload:", authData);
+    				window.location.href = "./profile.html"
+    				return false;
+  				}
+			});
+
+		}
+		function validateForm() {
+    			var x = document.getElementById("registerEmail").value;
+    			if (x == null || x == "")
+    			{
+        			alert("Email must be filled out");
+        			document.getElementById("registerPassword").value = "";
+        			document.getElementById("registerEmail").value = "";
+        			document.getElementById("registerRePassword").value = "";
+        			document.getElementById("form-group-email").className = "form-group has-error";
+        			return false;
+    			}
+    			var z = document.getElementById("registerRePassword").value;
+    			var y = document.getElementById("registerPassword").value;
+    			if (y == null || y == "" || z==null ||z== "" || y!=z)
+    			{
+        			document.getElementById("registerPassword").value = "";
+        			document.getElementById("registerEmail").value = "";
+        			document.getElementById("registerRePassword").value = "";
+        			document.getElementById("form-group-password1").className = "form-group has-error";
+        			document.getElementById("form-group-password2").className = "form-group has-error";
+        			alert("Password must be not be left blank.");	
+        			return false;
+    			}
+    			return registerUser();
+}
+		function registerUser()
+		{
+			var obj = new Object();
+   			obj.email = document.getElementById("registerEmail").value;
+   			obj.password  = document.getElementById("registerPassword").value;
+  			myFirebaseRef.createUser(obj, function(error, userData) {
+  				if (error) {
+    					console.log("Error creating user:", error);
+    					return false;
+  				} else {
+	console.log("Successfully created user account with uid:", userData.uid);
+	window.location.href = "./profile.html"
+  				}
+		});
+  			document.getElementById("registerPassword").value = "";
+        	document.getElementById("registerEmail").value = "";
+        	document.getElementById("registerRePassword").value = "";
+  			return false;
+		}
+	</script>
+</head>
+<body>
+<div class="container">
+<!-- Nav Menu Section -->
+<div class="logo-menu">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" data-spy="affix" data-offset-top="50">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header col-md-3">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#home"><i class="fa fa-briefcase"></i> FitnessVR</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar">
+                        <ul class="nav navbar-nav col-md-9 pull-right">
+                        <li><a href="./index.html#hero-area"><i class="fa fa-home"></i> Home</a></li>
+                        <li><a href="./index.html#services"><i class="fa fa-cogs"></i> Services</a></li>
+                        <!-- li><a href="#portfolio"><i class="fa fa-flask"></i> Portfolio</a></li -->
+                        <!-- li><a href="#clients"><i class="fa fa-puzzle-piece"></i> Clients</a></li -->
+                        <li><a href="./index.html#about"><i class="fa fa-info"></i> About</a></li>
+                        <li><a href="./index.html#contact"><i class="fa fa-envelope"></i> Contact</a></li>
+                        </ul>
+    </div>
+  </div>
+</nav>
+</div>
+<div class="row">
+	<h3>Signup</h3>
+<form class="form-horizontal" onsubmit="return validateForm2()">
+  <div class="form-group">
+    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="signinEmail" placeholder="Email">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="signinPassword" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Remember me
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Sign in</button>
+    </div>
+  </div>
+</form>
+</div>
+
+<div class="row">	
+<h3>Register</h3>
+<form class="form-horizontal" onsubmit="return validateForm()">
+  <div class="form-group" id="form-group-email">
+    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+    <div class="col-sm-10">
+      <input type="email" class="form-control" id="registerEmail" placeholder="Email">
+    </div>
+  </div>
+  <div class="form-group" id="form-group-password1">
+    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="registerPassword" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group" id="form-group-password2">
+    <label for="inputPassword3" class="col-sm-2 control-label">Re-Enter Password</label>
+    <div class="col-sm-10">
+      <input type="password" class="form-control" id="registerRePassword" placeholder="Password">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Register</button>
+    </div>
+  </div>
+</form>
+</div>
+</div>
+</body>
+</html>
